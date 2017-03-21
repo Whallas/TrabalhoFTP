@@ -55,7 +55,7 @@ class transferfileClient {
         dout.writeUTF(filename);
 
         String msgFromServer = din.readUTF();
-        if (msgFromServer.compareTo("File Already Exists") == 0) {
+        if (msgFromServer.compareTo("Arquivo já existe.") == 0) {
             String Option;
             System.out.println("File Already Exists. Want to OverWrite (Y/N) ?");
             Option = br.readLine();
