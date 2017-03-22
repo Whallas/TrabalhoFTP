@@ -51,23 +51,23 @@ class transferfile extends Thread {
                 dout.writeUTF(String.valueOf(ch));
             } while (ch != -1);
             fin.close();
-            dout.writeUTF("File Receive Successfully");
+            dout.writeUTF("Arquivo Recebido com Sucesso");
         }
     }
 
     private void ReceiveFile() throws Exception {
         String filename = din.readUTF();
-        if (filename.compareTo("File not found") == 0) {
+        if (filename.compareTo("Arquivo não Encontrado") == 0) {
             return;
         }
         File f = new File(filename);
         String option;
 
         if (f.exists()) {
-            dout.writeUTF("File Already Exists");
+            dout.writeUTF("Arquivo já Existe");
             option = din.readUTF();
         } else {
-            dout.writeUTF("SendFile");
+            dout.writeUTF("Envia arquivo");
             option = "Y";
         }
 
@@ -81,7 +81,7 @@ class transferfile extends Thread {
                 if (ch != -1) fout.write(ch);
             } while (ch != -1);
             fout.close();
-            dout.writeUTF("File Send Successfully");
+            dout.writeUTF("Arquivo enviado com Sucesso");
         }
     }
 
@@ -95,13 +95,13 @@ class transferfile extends Thread {
         if (!users.contains(usuario)) {
             for (String[] log : usersAndKeys) {
                 if (log[0].equals(usuario) && log[1].equals(senha)) {
-                    result = "Sucess Login";
+                    result = "login efetuado com Sucesso";
                     users.add(usuario);
                     break;
                 }
             }
-            if (result == null) result = "Login Error";
-        } else result = "User Logged";
+            if (result == null) result = "Error de login";
+        } else result = "Usuário Registrado!";
 
         dout.writeUTF(result);
     }
