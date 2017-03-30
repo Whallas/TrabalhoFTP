@@ -18,9 +18,9 @@ public class FtpServer {
      * @param args the command line arguments
      */
     public static void main(String args[]) throws Exception {
-        ServerSocket soct = new ServerSocket(2020);
+        //ServerSocket soct = new ServerSocket(2020);
         ServerSocket soc = new ServerSocket(2121);
-        System.out.println("FTP Server Started on Port Number 5217");
+        System.out.println("FTP Server Started on Port Number 2121");
         while (true) {
             System.out.println("Waiting for Connection ...");
             transferfile t = new transferfile(soc.accept());
@@ -35,11 +35,11 @@ class transferfile extends Thread {
     //private static ArrayList<String> users = new ArrayList<>();    
     private boolean userConectado;
 
-    Socket ClientSoc;
+    private Socket ClientSoc;
 
-    DataInputStream din;
-    DataOutputStream dout;
-    String kuser, kpass;
+    private DataInputStream din;
+    private DataOutputStream dout;
+    private String kuser, kpass;
 
     transferfile(Socket soc) {
         try {
@@ -90,6 +90,7 @@ class transferfile extends Thread {
                 codigo_retorno = "230";
                 dout.writeUTF(codigo_retorno);
                 this.userConectado = true;
+                break;
             }
         }
         if (!userConectado) {
@@ -116,7 +117,11 @@ class transferfile extends Thread {
 
     void SendFile() throws Exception {
         String filename = din.readUTF();
-        File f = new File(filename);
+        
+        ClassLoader classLoader = getClass().getClassLoader();
+        File fi = new File(classLoader.getResource("server files / filename").getFile());
+        
+        //File f = new File();
         if (!f.exists()) {
             dout.writeUTF("File Not Found");
             return;
@@ -176,26 +181,21 @@ class transferfile extends Thread {
                 if (Command.compareTo("USER") == 0) {
                     System.out.println("\tUSER Command Received ...");
                     cmd_user();
-                    continue;
                 } else if (Command.compareTo("PASS") == 0) {
                     System.out.println("\tPASS Command Receiced ...");
                     cmd_pass();
-                    continue;
                 } else if (Command.compareTo("GET") == 0) {
                     System.out.println("\tGET Command Received ...");
-                    ReceiveFile();
-                    continue;
+                    SendFile();
                 } else if (Command.compareTo("SEND") == 0) {
                     System.out.println("\tSEND Command Receiced ...");
                     ReceiveFile();
-                    continue;
                 } else if (Command.compareTo("ls") == 0) {
                     System.out.println("\tls Command Receiced ...");
                     lista();
-                    continue;
                 } else if (Command.compareTo("DISCONNECT") == 0) {
                     System.out.println("\tDisconnect Command Received ...");
-                    System.exit(1);
+                    System.exit(0);
                 }
             } catch (Exception ex) {
             }

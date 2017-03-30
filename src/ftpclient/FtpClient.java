@@ -19,7 +19,7 @@ public class FtpClient {
      */
     public static void main(String[] args) throws IOException, Exception {
         // TODO code application logic here
-        Socket soc = new Socket("192.168.56.1", 2121);
+        Socket soc = new Socket("127.0.0.1", 2121);
         transfereComando t = new transfereComando(soc);
         t.displayMenu();
     }
@@ -103,7 +103,7 @@ class transfereComando {
             return;
         }
 
-        dout.writeUTF(filename);
+        dout.writeUTF(f.getName());
 
         String msgFromServer = din.readUTF();
         if (msgFromServer.compareTo("File Already Exists") == 0) {
@@ -132,7 +132,7 @@ class transfereComando {
 
     void ReceiveFile() throws Exception {
         String fileName;
-        System.out.print("Enter File Name :");
+        System.out.print("Enter File Name: ");
         fileName = br.readLine();
         dout.writeUTF(fileName);
         String msgFromServer = din.readUTF();
@@ -172,7 +172,7 @@ class transfereComando {
     public void displayMenu() throws Exception {
         while (true) {
             //System.out.println("Welcome to jftp client 0.01");            
-            System.out.print("\nftp :");
+            System.out.print("\nftp: ");
             String[] comando = br.readLine().trim().split("\\s+");
 
             //System.out.println("count is = "+(comando.length));
@@ -188,7 +188,7 @@ class transfereComando {
                 dout.writeUTF("SEND");
                 SendFile();
             } else if (comando[0].compareTo("get") == 0) {
-                verifica();
+                //verifica();
                 dout.writeUTF("GET");
                 ReceiveFile();
             } else if (comando[0].compareTo("quit") == 0) {
