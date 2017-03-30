@@ -34,9 +34,8 @@ class transferfile extends Thread {
     private static final String[][] usuarios = {{"whallas", "111"}, {"analberto", "222"}, {"tiago", "333"}};
     //private static ArrayList<String> users = new ArrayList<>();    
     private boolean userConectado;
-
     private Socket ClientSoc;
-
+    private File serverDir;
     private DataInputStream din;
     private DataOutputStream dout;
     private String kuser, kpass;
@@ -46,6 +45,7 @@ class transferfile extends Thread {
             ClientSoc = soc;
             din = new DataInputStream(ClientSoc.getInputStream());
             dout = new DataOutputStream(ClientSoc.getOutputStream());
+            serverDir = new File("server files");
             System.out.println("FTP Client Connected ...");
             start();
 
@@ -102,8 +102,8 @@ class transferfile extends Thread {
     }
 
     void lista() throws Exception {
-        File dir = new File(".");
-        File[] filesList = dir.listFiles();
+        //File dir = new File(".");
+        File[] filesList = serverDir.listFiles();
         //dout.writeUTF("debug...");
         for (File file : filesList) {
             if (file.isFile()) {
@@ -118,10 +118,8 @@ class transferfile extends Thread {
     void SendFile() throws Exception {
         String filename = din.readUTF();
         
-        ClassLoader classLoader = getClass().getClassLoader();
-        File fi = new File(classLoader.getResource("server files / filename").getFile());
+        File f = new File(serverDir, filename);
         
-        //File f = new File();
         if (!f.exists()) {
             dout.writeUTF("File Not Found");
             return;
@@ -143,7 +141,7 @@ class transferfile extends Thread {
         if (filename.compareTo("File not found") == 0) {
             return;
         }
-        File f = new File(filename);
+        File f = new File(serverDir, filename);
         String option;
 
         if (f.exists()) {

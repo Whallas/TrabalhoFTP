@@ -27,13 +27,13 @@ public class FtpClient {
 
 class transfereComando {
 
-    Socket ClientSoc;
-
-    DataInputStream din;
-    DataOutputStream dout;
-    BufferedReader br;
-    String kuser, kpass;
+    private Socket ClientSoc;
+    private DataInputStream din;
+    private DataOutputStream dout;
+    private BufferedReader br;
+    private String kuser, kpass;
     private boolean userConectado;
+    private File clientDir;
 
     transfereComando(Socket soc) {
         try {
@@ -41,6 +41,7 @@ class transfereComando {
             din = new DataInputStream(ClientSoc.getInputStream());
             dout = new DataOutputStream(ClientSoc.getOutputStream());
             br = new BufferedReader(new InputStreamReader(System.in));
+            clientDir = new File("client files");
         } catch (Exception ex) {
         }
     }
@@ -96,7 +97,7 @@ class transfereComando {
         System.out.print("Enter File Name :");
         filename = br.readLine();
 
-        File f = new File(filename);
+        File f = new File(clientDir, filename);
         if (!f.exists()) {
             System.out.println("File not Exists...");
             dout.writeUTF("File not found");
@@ -142,7 +143,7 @@ class transfereComando {
             return;
         } else if (msgFromServer.compareTo("READY") == 0) {
             System.out.println("Receiving File ...");
-            File f = new File(fileName);
+            File f = new File(clientDir, fileName);
             if (f.exists()) {
                 String Option;
                 System.out.println("File Already Exists. Want to OverWrite (Y/N) ?");
@@ -194,7 +195,6 @@ class transfereComando {
             } else if (comando[0].compareTo("quit") == 0) {
                 dout.writeUTF("DISCONNECT");
                 System.exit(1);
-
             } else {
                 //dout.writeUTF("DISCONNECT");
                 System.out.print("\nAjuda?");
