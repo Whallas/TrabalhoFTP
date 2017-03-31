@@ -194,7 +194,7 @@ class transfereComando {
                 ReceiveFile();
             } else if (comando[0].compareTo("quit") == 0) {
                 dout.writeUTF("DISCONNECT");
-                System.exit(1);
+                System.exit(0);
             } else {
                 //dout.writeUTF("DISCONNECT");
                 System.out.print("\nAjuda?");

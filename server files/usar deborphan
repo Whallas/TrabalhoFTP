@@ -1,0 +1,5 @@
+Agora para usar o programa, ainda no terminal rode o comando abaixo para eliminar bibliotecas Orfãs:
+	sudo deborphan | xargs sudo apt-get -y remove --purge
+
+Para remover dados de pacotes desnecessários use o comando abaixo:
+	sudo deborphan --guess-data | xargs sudo apt-get -y remove --purge
